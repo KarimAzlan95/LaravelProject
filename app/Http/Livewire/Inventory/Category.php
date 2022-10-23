@@ -25,6 +25,7 @@ class Category extends Component
             'categories' => \App\Models\Category::where('category_status', true)
                 ->where('category_code', 'like', '%' . $this->search . '%')
                 ->orWhere('category_name', 'like', '%' . $this->search . '%')
+                ->orderBy('id', 'DESC')
                 ->paginate(5),
         ]);
     }
