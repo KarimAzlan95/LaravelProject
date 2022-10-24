@@ -70,69 +70,68 @@
                 </div>
             </div>
             <div class="row">
-                <center>
-                    <div class="col-sm-10 text-sm-center">
-                        <table class="table table-bordered table-hover table-responsive-sm text-nowrap">
-                            <thead style="background-color: #C0C0C0;">
-                            <tr>
-                                <th>#</th>
-                                <th>Category Code</th>
-                                <th>Category Name</th>
-                                <th>Status</th>
-                                <th>Action</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <?php $i = 1; ?>
-                            <div class="col-4">
-                                <input type="text" class="form-control" id="search" name="search"
-                                       wire:model="search" placeholder="--Search Details Here--">
-                            </div>
-                            @foreach($categories as $category)
-                                @if($categories->count() > 0)
-                                    <tr>
-                                        <td>{{ $i++ }}</td>
-                                        <td>{{ $category->category_code }}</td>
-                                        <td>{{ $category->category_name }}</td>
-                                        <td>
-                                            @if($category->category_status)
-                                                <span class="badge bg-success">ACTIVE</span>
-                                            @else
-                                                <span class="badge bg-danger">INACTIVE</span>
-                                            @endif
-                                        </td>
-                                        <td>
-                                            <a type="button" wire:click="view_category('{{ $category->id }}')">
-                                                <i class="fa-solid fa-eye" style="color: limegreen"></i>
-                                            </a>
-                                            <a type="button" wire:click="edit_category('{{ $category->id }}')">
-                                                <i class="fa-solid fa-edit" style="color: blue;"></i>
-                                            </a>
-                                            <a type="button" wire:click="delete_category('{{ $category->id }}')">
-                                                <i class="fa-solid fa-trash" style="color: red;"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                @else
-                                    <tr>
-                                        <td colspan="5" style="text-align: center">NO DATA</td>
-                                    </tr>
-                                @endif
-                            @endforeach
-                            </tbody>
-                        </table>
-                        {!! $categories->links() !!}
-                    </div>
-                </center>
+                <div class="col-sm-1"></div>
+                <div class="col-sm-10">
+                    <table class="table table-bordered table-hover table-responsive-sm text-nowrap">
+                        <thead style="background-color: #C0C0C0;">
+                        <tr>
+                            <th>#</th>
+                            <th>Category Code</th>
+                            <th>Category Name</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <?php $i = 1; ?>
+                        <div class="col-4">
+                            <input type="text" class="form-control" id="search" name="search"
+                                   wire:model="search" placeholder="--Search Details Here--">
+                        </div>
+                        @foreach($categories as $category)
+                            @if($categories->count() > 0)
+                                <tr>
+                                    <td>{{ $i++ }}</td>
+                                    <td>{{ $category->category_code }}</td>
+                                    <td>{{ $category->category_name }}</td>
+                                    <td>
+                                        @if($category->category_status)
+                                            <span class="badge bg-success">ACTIVE</span>
+                                        @else
+                                            <span class="badge bg-danger">INACTIVE</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <a type="button" wire:click="view_category('{{ $category->id }}')">
+                                            <i class="fa-solid fa-eye" style="color: limegreen"></i>
+                                        </a>
+                                        <a type="button" wire:click="edit_category('{{ $category->id }}')">
+                                            <i class="fa-solid fa-edit" style="color: blue;"></i>
+                                        </a>
+                                        <a type="button" wire:click="delete_category('{{ $category->id }}')">
+                                            <i class="fa-solid fa-trash" style="color: red;"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            @else
+                                <tr>
+                                    <td colspan="5" style="text-align: center">NO DATA</td>
+                                </tr>
+                            @endif
+                        @endforeach
+                        </tbody>
+                    </table>
+                    {!! $categories->links() !!}
+                </div>
             </div>
         </div>
     </div>
 </div>
-{{--@push('js')--}}
 <script>
     $(document).ready(function () {
 
-        window.addEventListener('swal.confirm', event => {
+
+        window.addEventListener('swal.category', event => {
             swal.fire({
                 title: event.detail.title,
                 text: event.detail.text,
@@ -153,7 +152,7 @@
             });
         });
 
-        window.addEventListener('swal:modal', event => {
+        window.addEventListener('swal:modal_category', event => {
             Swal.fire({
                 title: event.detail.message,
                 text: event.detail.text,
@@ -173,4 +172,3 @@
 
     });
 </script>
-{{--@endpush--}}

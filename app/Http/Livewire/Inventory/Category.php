@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Inventory;
 
+use App\Models\ProductCategories;
 use Livewire\Component;
 use Livewire\WithPagination;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -51,7 +52,6 @@ class Category extends Component
 
     public function confirmSimpan()
     {
-
         $this->validate([
             'cat_name' => 'required',
             'cat_code' => 'required',
@@ -62,7 +62,9 @@ class Category extends Component
             'cat_status.required' => 'Category Status is Required!',
         ]);
 
-        $this->dispatchBrowserEvent('swal.confirm', [
+//        $this->dispatchBrowserEvent('test');
+
+        $this->dispatchBrowserEvent('swal.category', [
             'type' => 'warning',
             'title' => 'Are you sure you want to continue?',
             'text' => '',
@@ -78,11 +80,12 @@ class Category extends Component
             'category_status' => $this->cat_status,
         ]);
 
-        $this->dispatchBrowserEvent('swal:modal', [
+        $this->dispatchBrowserEvent('swal:modal_category', [
             'type' => 'success',
             'message' => 'Data Successfully Created!',
         ]);
 
+        $this->emit('refresh_table_summary');
         $this->resetInput();
     }
 
@@ -112,7 +115,7 @@ class Category extends Component
 
     public function delete_category($category_id)
     {
-        $this->dispatchBrowserEvent('swal.confirm', [
+        $this->dispatchBrowserEvent('swal.category', [
             'type' => 'warning',
             'title' => 'Are you sure you want to continue?',
             'text' => '',
@@ -123,15 +126,18 @@ class Category extends Component
 
     public function delete($id)
     {
+        ProductCategories::where('category_id', $id)->delete();
 
         $category_delete = \App\Models\Category::findOrFail($id);
 
         if ($category_delete) {
+
             \App\Models\Category::where('id', $id)->delete();
         }
 
+        $this->emit('refresh_table_summary');
         $this->resetInput();
-        $this->dispatchBrowserEvent('swal:modal', [
+        $this->dispatchBrowserEvent('swal:modal_category', [
             'type' => 'success',
             'message' => 'Data Successfully Deleted!',
         ]);
@@ -150,16 +156,16 @@ class Category extends Component
             'modal_cat_status.required' => 'Category Status is Required!',
         ]);
 
-        $this->dispatchBrowserEvent('swal.confirm', [
+        $this->dispatchBrowserEvent('swal.category', [
             'type' => 'warning',
             'title' => 'Are you sure you want to continue?',
             'text' => '',
             'id' => $this->modal_cat_id,
-            'function' => 'update',
+            'function' => 'update_confirm',
         ]);
     }
 
-    public function update($id)
+    public function update_confirm($id)
     {
         $check = \App\Models\Category::findOrFail($id);
         if ($check) {
@@ -169,13 +175,14 @@ class Category extends Component
                 'category_status' => $this->modal_cat_status,
             ]);
 
-            $this->dispatchBrowserEvent('swal:modal', [
+            $this->emit('refresh_table_summary');
+            $this->dispatchBrowserEvent('swal:modal_category', [
                 'type' => 'success',
                 'message' => 'Data Successfully Updated!',
             ]);
         } else {
 
-            $this->dispatchBrowserEvent('swal:modal', [
+            $this->dispatchBrowserEvent('swal:modal_category', [
                 'type' => 'error',
                 'message' => 'Error!',
             ]);
@@ -186,9 +193,11 @@ class Category extends Component
 
     }
 
+//    public function
+
     public function alertCancel()
     {
-        $this->dispatchBrowserEvent('swal:modal', [
+        $this->dispatchBrowserEvent('swal:modal_category', [
             'type' => 'success',
             'message' => 'Operation Cancelled!',
         ]);

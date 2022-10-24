@@ -209,6 +209,7 @@
 </div>
 <script>
     $(document).ready(function () {
+
         window.addEventListener('swal.confirm', event => {
             swal.fire({
                 title: event.detail.title,

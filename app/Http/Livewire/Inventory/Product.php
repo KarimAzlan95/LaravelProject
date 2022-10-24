@@ -32,6 +32,12 @@ class Product extends Component
     public $show_button = true;
     public $show_category = false;
     public $array = [];
+    protected $listeners = ['refresh_table_summary' => '$refresh'];
+
+    public function TEST()
+    {
+        dd('test');
+    }
 
     public function render()
     {
@@ -62,9 +68,13 @@ class Product extends Component
                 ->when($this->query2, fn($q) => $q->orderBy('product_name', 'DESC'))
                 ->when($this->query3, fn($q) => $q->orderBy('product_price', 'ASC'))
                 ->when($this->query4, fn($q) => $q->orderBy('product_price', 'DESC'))
+                ->orderBy('id', 'DESC')
                 ->paginate(5),
             'summary_table' => Products::with('categories')
                 ->whereIn('products.id', $this->pluck_product_id)
+                ->WhereHas('categories', function ($q) {
+                    $q->where('category_status', true);
+                })
                 ->WhereHas('categories', function ($q) {
                     $q->where('category_name', 'like', '%' . $this->search_table . '%');
                 })
@@ -161,7 +171,7 @@ class Product extends Component
             'product_price . required' => 'Product Price is Required!',
         ]);
 
-        $this->dispatchBrowserEvent('swal . confirm', [
+        $this->dispatchBrowserEvent('swal.confirm', [
             'type' => 'warning',
             'title' => 'Are you sure you want to continue?',
             'text' => '',
@@ -205,7 +215,7 @@ class Product extends Component
 
         $this->savebutton_text = 'UPDATE';
         $this->savebutton_click = 'confirmUpdate()';
-        $this->savebutton_style = 'btn btn - success';
+        $this->savebutton_style = 'btn btn-success';
     }
 
     public function confirmUpdate()
@@ -271,7 +281,7 @@ class Product extends Component
                 'message' => 'An Error Has Occured, Please try Again!',
             ]);
         }
-        return view('livewire . inventory . product');
+        return view('livewire.inventory.product');
     }
 
     public function get_categories()
@@ -327,4 +337,5 @@ class Product extends Component
             'message' => 'Operation Cancelled!',
         ]);
     }
+
 }
